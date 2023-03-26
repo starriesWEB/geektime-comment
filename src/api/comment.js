@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getCommentApi(params) {
     return request({
-        url: '/comment',
+        url: '/api/serv/v1/comments',
         method: 'post',
         data: params
     })

@@ -1,107 +1,110 @@
 <template>
-  <div id="app">
+  <div id="app" :data-theme="theme.curTheme">
+
+    <div id="alert-box" v-bind:class="{'alert-success': alertMsg.success, 'alert-warning': alertMsg.warning}"
+         class="alert w-auto fixed top-1/3 left-1/2 transform -translate-x-1/2 p-6 rounded-md shadow-lg z-10"
+         v-show="alertMsg.show">
+      <p class="text-xl font-semibold mb-2">{{ alertMsg.title }}</p>
+    </div>
+
     <div class="grid grid-cols-12 grid-rows-12 max-h-screen  gap-4">
 
       <div class="grid col-span-12 row-span-1 border-2   border-green-300">
-        
-          <div class="navbar bg-base-100">
-            <div class="flex-auto">
-              <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
-            </div>
-            <div class="flex-auto">
-              <div class="form-control mt-2">
-                <div class="input-group">
-                  <input type="text" placeholder="bookId..." class="input input-bordered" />
-                  <input type="text" placeholder="bookName..." class="input input-bordered" />
-                  <button class="btn btn-info">Add</button>
-                </div>
+        <div class="navbar bg-base-100">
+          <div class="flex-auto">
+            <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
+          </div>
+          <div class="flex-auto">
+            <div class="form-control mt-2">
+              <div class="input-group">
+                <input type="text" placeholder="bookId..." class="input input-bordered  input-primary"
+                       v-model="book.bookId"/>
+                <input type="text" placeholder="bookName..." class="input input-bordered  input-primary"
+                       v-model="book.bookName"/>
+                <button class="btn btn-primary" @click="addBook">Add</button>
               </div>
             </div>
-            <div class="flex-none">
-              <ul class="menu menu-horizontal px-1">
-                <li><a>Item 1</a></li>
-                <button data-act-class="shadow-outline" data-set-theme="light" class="bg-green-700 focus:outline-none m-1 rounded p-2">light</button>
-                <select data-choose-theme >
-                    <option value="light">Default</option>
-                    <option value="masum">masum</option>
-                    <option value="light">light</option>
-                </select>
-                <li tabindex="0">
-                  <a>Theme</a>
-                  <ul tabindex="0" class="shadow menu dropdown-content bg-base-100 rounded-box " data-choose-theme="">
-                    <li><a data-set-theme="masum">Masum</a></li>
-                    <li><a data-set-theme="emerald">emerald</a></li>
-                    <li><a data-set-theme="light">light</a></li>
-                    <li><a data-set-theme="dark">dark</a></li>
-                    <li><a data-set-theme="cupcake">cupcake</a></li>
-                    <li><a data-set-theme="bumblebee">bumblebee</a></li>
-                    <li><a data-set-theme="aqua">aqua</a></li>
-                    <li><a data-set-theme="corporate">corporate</a></li>
-                    <li><a data-set-theme="synthwave">synthwave</a></li>
-                    <li><a data-set-theme="retro">retro</a></li>
-                    <li><a data-set-theme="cyberpunk">cyberpunk</a></li>
-                    <li><a data-set-theme="valentine">valentine</a></li>
-                    <li><a data-set-theme="halloween">halloween</a></li>
-                    <li><a data-set-theme="garden">garden</a></li>
-                    <li><a data-set-theme="forest">forest</a></li>
-                    <li><a data-set-theme="lofi">lofi</a></li>
-                    <li><a data-set-theme="pastel">pastel</a></li>
-                    <li><a data-set-theme="fantasy">fantasy</a></li>
-                    <li><a data-set-theme="wireframe">wireframe</a></li>
-                    <li><a data-set-theme="black">black</a></li>
-                    <li><a data-set-theme="luxury">luxury</a></li>
-                    <li><a data-set-theme="dracula">dracula</a></li>
-                    <li><a data-set-theme="cmyk">cmyk</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
           </div>
+          <div class="flex-none">
+            <ul class="menu menu-horizontal px-1">
+              <button class="btn btn-accent" @click="toggleTheme">Toggle Theme</button>
+            </ul>
+          </div>
+        </div>
       </div>
 
+
       <div class="col-span-2 row-span-1 border-2  grid place-items-center ">
-        <p class="text-2xl text-center">Redis设计与实现</p>
+        <p class="text text-center">{{ book.curBookName }}</p>
       </div>
       <div class="col-span-1 row-span-11"></div>
 
 
       <div class="col-span-6  row-span-11  overflow-y-auto overflow-x-hidden border-2 border-yellow-300">
-        <p class="item-center">
-          testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
-        </p>
-        <p class="item-center">test</p>
-        <p class="item-center">test</p>
-        <p class="item-center">test</p>
-        <p class="item-center">test</p>
+
+        <div class="chat chat-start">
+          <div class="chat-image avatar">
+            <div class="w-10 rounded-full border-2">
+              <img src="./assets/logo.png" />
+            </div>
+          </div>
+          <div class="chat-bubble chat-bubble-success">It's over Anakin,I have the high ground.It's over Anakin,I have the high ground.It's
+            over Anakin,I have the high ground.
+          </div>
+        </div>
+        <div class="chat chat-end">
+          <div class="chat-image avatar">
+            <div class="w-10 rounded-full border-2">
+              <img src="./assets/logo.png" />
+            </div>
+          </div>
+          <div class="chat-bubble chat-bubble-warning">You underestimate my power!</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="chat chat-start">
+          <div class="chat-image avatar">
+            <div class="w-10 rounded-full border-2">
+              <img src="./assets/logo.png" />
+            </div>
+          </div>
+          <div class="chat-bubble chat-bubble-success">It's over Anakin,I have the high ground.It's over Anakin,I have the high ground.It's
+            over Anakin,I have the high ground.
+          </div>
+        </div>
+        <div class="chat chat-end">
+          <div class="chat-image avatar">
+            <div class="w-10 rounded-full border-2">
+              <img src="./assets/logo.png" />
+            </div>
+          </div>
+          <div class="chat-bubble chat-bubble-warning">You underestimate my power!</div>
+        </div>
       </div>
 
 
       <div class="col-span-1 row-span-11"></div>
 
 
-
       <div class="col-span-2 row-span-1 border-2  grid place-items-center ">
-        <p class="text-2xl text-center">Redis设计与实现</p>
+        <p class="text text-center">{{ article.curTitle }}</p>
       </div>
 
       <div class="col-span-2 row-span-10 border-2  border-green-300">
         <div class="overflow-y-auto overflow-x-hidden">
-          <ul class="menu bg-base-100 ">
-            <li><a>Item 1</a></li>
-            <li class="bordered"><a>I have border</a></li>
-            <li><a>Item 3</a></li>
-            <li><a>Item 3</a></li>
-            <li><a>Item 3</a></li>
+          <ul class="menu menu-compact">
+            <li v-for="item in bookList" :key="item"><a v-bind:class="{'active': item === book.curBookName}" @click="selectCurBook(item)">{{ item }}</a></li>
           </ul>
         </div>
       </div>
 
       <div class="col-span-2 row-span-10 overflow-y-auto overflow-x-hidden border-2 border-red-300">
-        <ul class="menu bg-base-100 ">
-          <li><a>Item 1</a></li>
-          <li class="bordered"><a>I have border</a></li>
-          <li><a>Item 3</a></li>
-        </ul>
+        <div class="overflow-y-auto overflow-x-hidden">
+          <ul class="menu menu-compact">
+            <li v-for="item in articleList" :key="item.id"><a v-bind:class="{'active': item.id === article.curId}" @click="selectCurArticle(item)">{{ item.article_title }}</a></li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -109,14 +112,120 @@
 </template>
 
 <script>
-import themeChange from 'theme-change'
+
+import localStorageUtil from './utils/localStorageUtil'
+import {getCommentApi, getArticleApi} from './api/comment'
 
 export default {
   name: 'App',
-  components: {},
-  mounted: function () {
-    themeChange(false)
+  mounted() {
+    this.getAllBookName()
+    this.book.curBookName = localStorageUtil.getCurBookNameFromConst()
+    this.book.curBookId = localStorageUtil.getCurBookIdFromConst()
+    this.articleParams.cid = this.book.curBookId
+    this.getArticleList()
+    getCommentApi()
   },
+  data() {
+    return {
+      theme: {
+        isDark: true,
+        curTheme: 'halloween',
+      },
+      book: {
+        bookId: '',
+        bookName: '',
+        curBookId: 0,
+        curBookName: ''
+      },
+      bookList: [],
+      alertMsg: {
+        show: false,
+        timer: null,
+        title: '',
+        success: false,
+        warning: false
+      },
+      articleParams: {
+        cid: 0,
+        size: 100,
+        prev: 0,
+        order: "earliest",
+        sample: false,
+      },
+      articleList: [],
+      article: {
+        curId: 0,
+        curTitle: ''
+      }
+    }
+  },
+  methods: {
+    toggleTheme() {
+      this.theme.isDark = !this.theme.isDark
+      if (this.theme.isDark) {
+        this.theme.curTheme = 'halloween'
+      } else {
+        this.theme.curTheme = 'bumblebee'
+      }
+    },
+
+    addBook() {
+      if ((typeof this.book.bookId === 'undefined') || (typeof this.book.bookName === 'undefined') || (this.book.bookId.trim().length === 0) || (this.book.bookName.trim().length === 0)) {
+        this.alertMsg.warning = true
+        this.alertMsg.success = false
+        this.openAlert("添加失败,空文本")
+        return
+      }
+      localStorageUtil.setBookItem(this.book.bookName, this.book.bookId)
+      this.book = {}
+      this.getAllBookName()
+      this.alertMsg.warning = false
+      this.alertMsg.success = true
+      this.openAlert("添加成功")
+    },
+    getAllBookName() {
+      this.bookList = localStorageUtil.getAllBookKey()
+    },
+    openAlert(title) {
+      this.alertMsg.title = title
+      this.alertMsg.show = true
+      this.alertMsg.timer = setTimeout(() => {
+        this.closeAlert()
+      }, 1500)
+    },
+    closeAlert() {
+      clearTimeout(this.alertMsg.timer)
+      this.alertMsg.show = false
+      this.alertMsg.title = ''
+      this.alertMsg.message = ''
+    },
+    selectCurBook(bookName) {
+      this.article.curTitle = ''
+      this.article.curId = ''
+      this.articleList = []
+
+      this.book.curBookName = bookName
+      localStorageUtil.setCurBookName(bookName)
+      this.book.curBookId = localStorageUtil.getCurBookId(bookName)
+      localStorageUtil.setCurBookId(this.book.curBookId)
+
+      this.articleParams.cid = this.book.curBookId
+      this.getArticleList()
+    },
+    getArticleList() {
+      getArticleApi(this.articleParams).then(req => {
+        this.articleList = req.data.data.list
+      })
+    },
+    selectCurArticle(item) {
+      this.article.curTitle = item.article_title
+      localStorageUtil.setCurArticleTitle(item.article_title)
+      this.article.curId = item.id
+      localStorageUtil.setCurArticleId(item.id)
+    }
+
+  }
 }
 </script>
 
