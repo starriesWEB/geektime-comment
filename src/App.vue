@@ -94,7 +94,11 @@
       <div class="col-span-2 row-span-10 border-2  border-green-300">
         <div class="overflow-y-auto overflow-x-hidden">
           <ul class="menu menu-compact">
-            <li v-for="item in bookList" :key="item"><a v-bind:class="{'active': item === book.curBookName}" @click="selectCurBook(item)">{{ item }}</a></li>
+            <li v-for="item in bookList" :key="item">
+              <a v-bind:class="{'active': item == book.curBookName}" @click="selectCurBook(item)">
+                {{ item }}
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -102,7 +106,11 @@
       <div class="col-span-2 row-span-10 overflow-y-auto overflow-x-hidden border-2 border-red-300">
         <div class="overflow-y-auto overflow-x-hidden">
           <ul class="menu menu-compact">
-            <li v-for="item in articleList" :key="item.id"><a v-bind:class="{'active': item.id === article.curId}" @click="selectCurArticle(item)">{{ item.article_title }}</a></li>
+            <li v-for="item in articleList" :key="item.id">
+              <a v-bind:class="{'active': item.id == article.curId}" @click="selectCurArticle(item)">
+                {{ item.article_title }}
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -118,13 +126,14 @@ import {getCommentApi, getArticleApi} from './api/comment'
 
 export default {
   name: 'App',
-  mounted() {
+  created() {
     this.getAllBookName()
     this.book.curBookName = localStorageUtil.getCurBookNameFromConst()
     this.book.curBookId = localStorageUtil.getCurBookIdFromConst()
     this.articleParams.cid = this.book.curBookId
+    this.article.curId = localStorageUtil.getCurArticleIdFromConst()
+    this.article.curTitle = localStorageUtil.getCurArticleTitleFromConst()
     this.getArticleList()
-    getCommentApi()
   },
   data() {
     return {
@@ -153,10 +162,29 @@ export default {
         order: "earliest",
         sample: false,
       },
-      articleList: [],
+      articleList: [
+        {
+          id: 0,
+          article_title: ''
+        }
+      ],
       article: {
         curId: 0,
         curTitle: ''
+      },
+      commentParams: {
+        aid: 0,
+        prev: 0
+      },
+      commentList: [
+        {
+          score: "",
+          comment_content: "",
+          user_header: ""
+        }
+      ],
+      comment: {
+        score: ""
       }
     }
   },
@@ -201,9 +229,10 @@ export default {
       this.alertMsg.message = ''
     },
     selectCurBook(bookName) {
-      this.article.curTitle = ''
-      this.article.curId = ''
+      this.article = {}
       this.articleList = []
+      localStorageUtil.removeCurArticleId()
+      localStorageUtil.removeCurArticleTitle()
 
       this.book.curBookName = bookName
       localStorageUtil.setCurBookName(bookName)
@@ -216,15 +245,31 @@ export default {
     getArticleList() {
       getArticleApi(this.articleParams).then(req => {
         this.articleList = req.data.data.list
+        this.article.curId = this.articleList[0].id
+        this.article.curTitle = this.articleList[0].article_title
+
+        this.commentParams.aid = this.article.curId
+        this.commentParams.prev = 0
+        this.getCommentList()
       })
     },
     selectCurArticle(item) {
-      this.article.curTitle = item.article_title
-      localStorageUtil.setCurArticleTitle(item.article_title)
-      this.article.curId = item.id
-      localStorageUtil.setCurArticleId(item.id)
-    }
+      this.article = {}
 
+      this.article.curTitle = item.article_title
+      this.article.curId = item.id
+      localStorageUtil.setCurArticleTitle(item.article_title)
+      localStorageUtil.setCurArticleId(item.id)
+
+      this.commentParams.aid = this.article.curId
+      this.commentParams.prev = 0
+      this.getCommentList()
+    },
+    getCommentList() {
+      getCommentApi(this.commentParams).then(req => {
+        this.commentList = req.data.list
+      })
+    }
   }
 }
 </script>

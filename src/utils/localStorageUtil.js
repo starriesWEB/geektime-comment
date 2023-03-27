@@ -48,8 +48,11 @@ export default class LocalStorageUtil {
   }
 
 
-  static removeItem(key) {
-    localStorage.removeItem(key);
+  static removeCurArticleId() {
+    localStorage.removeItem(CUR_ARTICLE_ID);
+  }
+  static removeCurArticleTitle() {
+    localStorage.removeItem(CUR_ARTICLE_TITLE);
   }
 
   static clear() {
