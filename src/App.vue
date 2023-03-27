@@ -42,45 +42,30 @@
 
       <div class="col-span-6  row-span-11  overflow-y-auto overflow-x-hidden border-2 border-yellow-300">
 
-        <div class="chat chat-start">
-          <div class="chat-image avatar">
-            <div class="w-10 rounded-full border-2">
-              <img src="./assets/logo.png" />
+        <div v-for="item in commentList" :key="item.score">
+          <div class="chat chat-start">
+            <div class="chat-image avatar">
+              <div class="w-10 rounded-full border-2">
+                <img :src="item.user_header" />
+              </div>
+            </div>
+            <div class="chat-bubble chat-bubble-success" v-html="item.comment_content">
             </div>
           </div>
-          <div class="chat-bubble chat-bubble-success">It's over Anakin,I have the high ground.It's over Anakin,I have the high ground.It's
-            over Anakin,I have the high ground.
-          </div>
-        </div>
-        <div class="chat chat-end">
-          <div class="chat-image avatar">
-            <div class="w-10 rounded-full border-2">
-              <img src="./assets/logo.png" />
+          <div class="chat chat-end">
+            <div class="chat-image avatar">
+              <div class="w-10 rounded-full border-2">
+                <img src="./assets/logo.png" />
+              </div>
+            </div>
+            <div class="chat-bubble chat-bubble-warning" v-html="item.replies[0].content">
             </div>
           </div>
-          <div class="chat-bubble chat-bubble-warning">You underestimate my power!</div>
+
+          <div class="divider"></div>
         </div>
 
-        <div class="divider"></div>
 
-        <div class="chat chat-start">
-          <div class="chat-image avatar">
-            <div class="w-10 rounded-full border-2">
-              <img src="./assets/logo.png" />
-            </div>
-          </div>
-          <div class="chat-bubble chat-bubble-success">It's over Anakin,I have the high ground.It's over Anakin,I have the high ground.It's
-            over Anakin,I have the high ground.
-          </div>
-        </div>
-        <div class="chat chat-end">
-          <div class="chat-image avatar">
-            <div class="w-10 rounded-full border-2">
-              <img src="./assets/logo.png" />
-            </div>
-          </div>
-          <div class="chat-bubble chat-bubble-warning">You underestimate my power!</div>
-        </div>
       </div>
 
 
@@ -131,9 +116,9 @@ export default {
     this.book.curBookName = localStorageUtil.getCurBookNameFromConst()
     this.book.curBookId = localStorageUtil.getCurBookIdFromConst()
     this.articleParams.cid = this.book.curBookId
-    this.article.curId = localStorageUtil.getCurArticleIdFromConst()
-    this.article.curTitle = localStorageUtil.getCurArticleTitleFromConst()
-    this.getArticleList()
+    // this.article.curId = localStorageUtil.getCurArticleIdFromConst()
+    // this.article.curTitle = localStorageUtil.getCurArticleTitleFromConst()
+    this.getArticleList(true)
   },
   data() {
     return {
@@ -180,7 +165,13 @@ export default {
         {
           score: "",
           comment_content: "",
-          user_header: ""
+          user_header: "",
+          replies: [
+            {
+              content: "",
+              user_name: "",
+            }
+          ]
         }
       ],
       comment: {
@@ -231,6 +222,8 @@ export default {
     selectCurBook(bookName) {
       this.article = {}
       this.articleList = []
+      this.commentList = []
+
       localStorageUtil.removeCurArticleId()
       localStorageUtil.removeCurArticleTitle()
 
@@ -240,13 +233,28 @@ export default {
       localStorageUtil.setCurBookId(this.book.curBookId)
 
       this.articleParams.cid = this.book.curBookId
-      this.getArticleList()
+      this.getArticleList(false)
     },
-    getArticleList() {
-      getArticleApi(this.articleParams).then(req => {
-        this.articleList = req.data.data.list
-        this.article.curId = this.articleList[0].id
-        this.article.curTitle = this.articleList[0].article_title
+    getArticleList(initFlag) {
+      getArticleApi(this.articleParams).then(resp => {
+        this.articleList = resp.data.data.list
+        if (initFlag) {
+          let id = localStorageUtil.getCurArticleIdFromConst();
+          let title = localStorageUtil.getCurArticleTitleFromConst();
+          if (id == null) {
+            this.article.curId = this.articleList[0].id
+          } else {
+            this.article.curId = id
+          }
+          if (title == null) {
+            this.article.curTitle = this.articleList[0].article_title
+          } else {
+            this.article.curTitle = title
+          }
+        } else {
+          this.article.curId = this.articleList[0].id
+          this.article.curTitle = this.articleList[0].article_title
+        }
 
         this.commentParams.aid = this.article.curId
         this.commentParams.prev = 0
@@ -255,6 +263,7 @@ export default {
     },
     selectCurArticle(item) {
       this.article = {}
+      this.commentList = []
 
       this.article.curTitle = item.article_title
       this.article.curId = item.id
@@ -266,8 +275,9 @@ export default {
       this.getCommentList()
     },
     getCommentList() {
-      getCommentApi(this.commentParams).then(req => {
-        this.commentList = req.data.list
+      getCommentApi(this.commentParams).then(resp => {
+        this.commentList = resp.data.data.list
+          this.commentList = this.commentList.filter(item => item.replies !== undefined && item.replies.length !== 0)
       })
     }
   }
