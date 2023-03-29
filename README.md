@@ -4,6 +4,7 @@
 vue + daisyui(tailwindcss) + axios
 
 ## 功能
++ 无限制查看评论区
 + 支持夜晚模式
 + 只显示作者回复的评论
 + 使用 localStorage 存储专栏
