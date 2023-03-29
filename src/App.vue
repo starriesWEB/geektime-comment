@@ -1,6 +1,5 @@
 <template>
   <div id="app" :data-theme="theme.curTheme">
-
     <div id="alert-box" v-bind:class="{'alert-success': alertMsg.success, 'alert-warning': alertMsg.warning}"
          class="alert w-auto fixed top-1/3 left-1/2 transform -translate-x-1/2 p-6 rounded-md shadow-lg z-10"
          v-show="alertMsg.show">
@@ -9,7 +8,7 @@
 
     <div class="grid grid-cols-12 grid-rows-12 max-h-screen  gap-4">
 
-      <div class="grid col-span-12 row-span-1 border-2  border-green-300">
+      <div class="grid col-span-12 row-span-1 ">
         <div class="navbar bg-base-100">
           <div class="flex-auto">
             <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
@@ -46,22 +45,22 @@
       <div class="col-span-1 row-span-11"></div>
 
 
-      <div class="col-span-6  row-span-11  overflow-y-auto overflow-x-hidden border-2 border-yellow-300">
+      <div class="col-span-6  row-span-11  overflow-y-auto overflow-x-hidden border-2 ">
 
         <div v-for="item in commentList" :key="item.score">
           <div class="chat chat-start">
             <div class="chat-image avatar">
               <div class="w-10 rounded-full border-2">
-                <img :src="item.user_header" />
+                <img :src="item.user_header" @error="onImageError" />
               </div>
             </div>
             <div class="chat-bubble chat-bubble-success" v-html="item.comment_content">
             </div>
           </div>
-          <div class="chat chat-end" v-if="item?.replies ?? false">
+          <div class="chat chat-end" v-if="item && (item.replies !== undefined && item.replies !== null)">
             <div class="chat-image avatar">
               <div class="w-10 rounded-full border-2">
-                <img src="./assets/logo.png" />
+                <img src="./assets/right.gif" />
               </div>
             </div>
             <div class="chat-bubble chat-bubble-warning" v-html="item.replies[0].content">
@@ -83,7 +82,7 @@
         <p class="text text-center">{{ article.curTitle }}</p>
       </div>
 
-      <div class="col-span-2 row-span-10 border-2  border-green-300">
+      <div class="col-span-2 row-span-10 border-2  ">
         <div class="overflow-y-auto overflow-x-hidden">
           <ul class="menu menu-compact">
             <li v-for="item in bookList" :key="item">
@@ -95,7 +94,7 @@
         </div>
       </div>
 
-      <div class="col-span-2 row-span-10 overflow-y-auto overflow-x-hidden border-2 border-red-300">
+      <div class="col-span-2 row-span-10 overflow-y-auto overflow-x-hidden border-2 ">
         <div class="overflow-y-auto overflow-x-hidden">
           <ul class="menu menu-compact">
             <li v-for="item in articleList" :key="item.id">
@@ -107,7 +106,7 @@
         </div>
       </div>
       <div class="row-span-1">
-        <button class="btn btn-primary" @click="getCommentList">NEXT</button>
+        <button class="btn btn-primary ml-3" @click="getCommentList">NEXT</button>
       </div>
 
     </div>
@@ -128,9 +127,11 @@ export default {
     this.book.curBookId = localStorageUtil.getCurBookIdFromConst()
     this.articleParams.cid = this.book.curBookId
     this.getArticleList(true)
+    this.onlyShowAuth = localStorageUtil.getOnlyShowAuthFromConst()
   },
   data() {
     return {
+      defaultUrl: require("./assets/left.png"),
       theme: {
         isDark: true,
         curTheme: 'halloween',
@@ -189,7 +190,15 @@ export default {
       }
     }
   },
+  watch: {
+    onlyShowAuth: function (newVal) {
+      localStorageUtil.setOnlyShowAuth(newVal)
+    }
+  },
   methods: {
+    onImageError(event) {
+      event.target.src = this.defaultUrl
+    },
     toggleTheme() {
       this.theme.isDark = !this.theme.isDark
       if (this.theme.isDark) {
@@ -290,9 +299,6 @@ export default {
         this.commentParams.prev = this.commentList[this.commentList.length - 1].score
         if (this.onlyShowAuth) {
           this.commentList = this.commentList.filter(item => item.replies !== undefined && item.replies.length !== 0)
-          console.log(true)
-        } else {
-          console.log(false)
         }
         if (this.commentList.length === 0) {
           this.openAlert("当前页无评论")

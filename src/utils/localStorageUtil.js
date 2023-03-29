@@ -1,62 +1,67 @@
-const bookPrefix = 'book|'
-const CUR_BOOK_NAME = 'curBookName'
-const CUR_BOOK_ID = 'curBookId'
-const CUR_ARTICLE_TITLE = 'curArticleTitle'
-const CUR_ARTICLE_ID = 'curArticleId'
+const book_prefix = 'book|'
+const cur_book_name = 'curBookName'
+const cur_book_id = 'curBookId'
+const cur_article_title = 'curArticleTitle'
+const cur_article_id = 'curArticleId'
+const only_show_auth = 'onlyShowAuth'
 
 export default class LocalStorageUtil {
 
 
+  static setOnlyShowAuth(value) {
+    localStorage.setItem(only_show_auth, value);
+  }
+
+  static getOnlyShowAuthFromConst() {
+    return localStorage.getItem(only_show_auth)
+  }
+
   static setBookItem(key, value) {
-    localStorage.setItem(bookPrefix + key, value);
+    localStorage.setItem(book_prefix + key, value);
   }
   static setCurBookName(value) {
-    localStorage.setItem(CUR_BOOK_NAME, value);
+    localStorage.setItem(cur_book_name, value);
   }
   static setCurArticleTitle(value) {
-    localStorage.setItem(CUR_ARTICLE_TITLE, value);
+    localStorage.setItem(cur_article_title, value);
   }
   static setCurBookId(value) {
-    localStorage.setItem(CUR_BOOK_ID, value);
+    localStorage.setItem(cur_book_id, value);
   }
   static setCurArticleId(value) {
-    localStorage.setItem(CUR_ARTICLE_ID, value);
+    localStorage.setItem(cur_article_id, value);
   }
 
   static getCurBookNameFromConst() {
-    let item = localStorage.getItem(CUR_BOOK_NAME);
+    let item = localStorage.getItem(cur_book_name);
     return item ? item : null
   }
   static getCurArticleTitleFromConst() {
-    let item = localStorage.getItem(CUR_ARTICLE_TITLE);
+    let item = localStorage.getItem(cur_article_title);
     return item ? item : null
   }
   static getCurBookIdFromConst() {
-    let item = localStorage.getItem(CUR_BOOK_ID);
+    let item = localStorage.getItem(cur_book_id);
     return item ? item : null
   }
 
 
   static getCurArticleIdFromConst() {
-    let item = localStorage.getItem(CUR_ARTICLE_ID);
+    let item = localStorage.getItem(cur_article_id);
     return item ? item : null
   }
 
   static getCurBookId(key) {
-    let item = localStorage.getItem(bookPrefix + key);
+    let item = localStorage.getItem(book_prefix + key);
     return item ? item : null
   }
 
 
   static removeCurArticleId() {
-    localStorage.removeItem(CUR_ARTICLE_ID);
+    localStorage.removeItem(cur_article_id);
   }
   static removeCurArticleTitle() {
-    localStorage.removeItem(CUR_ARTICLE_TITLE);
-  }
-
-  static clear() {
-    localStorage.clear();
+    localStorage.removeItem(cur_article_title);
   }
 
   static getAllBookKey() {
@@ -64,21 +69,11 @@ export default class LocalStorageUtil {
     let idx = 0;
     for (let i = 0; i < localStorage.length; i++) {
       let key = localStorage.key(i)
-      if (key.startsWith(bookPrefix)) {
-        keys[idx++] = key.replace(bookPrefix, '');
+      if (key.startsWith(book_prefix)) {
+        keys[idx++] = key.replace(book_prefix, '');
       }
     }
     return keys;
   }
 
-  static getAllBookItem() {
-    let items = []
-    for (let i = 0; i < localStorage.length; i++) {
-      let item = localStorage.getItem(localStorage.key(i))
-      if (item.startsWith(bookPrefix)) {
-        items[i] = item.replace(bookPrefix, '');
-      }
-    }
-    return items;
-  }
 }

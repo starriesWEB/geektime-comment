@@ -1,24 +1,15 @@
-# geektime
+# 极客时间评论区
 
-## Project setup
-```
-npm install
-```
+## 技术栈
+vue + daisyui(tailwindcss) + axios
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 功能
++ 支持夜晚模式
++ 只显示作者回复的评论
++ 使用 localStorage 存储专栏
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 图示
+![](./doc/bookId.png)
+![](./doc/addBook.png)
+![](./doc/dark.png)
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
