@@ -3,7 +3,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {                //webpack-dev-server配置
     host: 'localhost',
-    port: 8080,            //配置本项目运行端口
+    port: 80,            //配置本项目运行端口
     https: true,
     proxy: {                //配置代理服务器来解决跨域问题
       '/api': {
