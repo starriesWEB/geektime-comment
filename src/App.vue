@@ -45,7 +45,7 @@
       <div class="col-span-1 row-span-11"></div>
 
 
-      <div class="col-span-6  row-span-11  overflow-y-auto overflow-x-hidden border-2 ">
+      <div id="comments" class="col-span-6  row-span-11  overflow-y-auto overflow-x-hidden border-2 ">
 
         <div v-for="item in commentList" :key="item.score">
           <div class="chat chat-start">
@@ -300,6 +300,7 @@ export default {
         if (this.onlyShowAuth) {
           this.commentList = this.commentList.filter(item => item.replies !== undefined && item.replies.length !== 0)
         }
+        document.getElementById('comments').scrollTop = 0
         if (this.commentList.length === 0) {
           this.openAlert("当前页无评论")
         }
