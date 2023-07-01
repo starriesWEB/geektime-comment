@@ -26,7 +26,7 @@
           </div>
           <div class="flex-none form-control mr-5">
             <label class="label cursor-pointer">
-              <span class="label-text mr-3">Only Show Auth</span>
+              <span class="label-text mr-3">Only Show Author</span>
               <input type="checkbox" class="toggle" v-model="onlyShowAuth" />
             </label>
           </div>
