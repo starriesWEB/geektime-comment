@@ -7,7 +7,8 @@ module.exports = defineConfig({
     https: true,
     proxy: {                //配置代理服务器来解决跨域问题
       '/api': {
-        target: 'https://time.geekbang.org',      //配置要替换的后台接口地址
+        // target: 'https://time.geekbang.org',      //配置要替换的后台接口地址
+        target: 'https://geektime.starries.workers.dev',      //配置要替换的后台接口地址
         changOrigin: true,                      //配置允许改变Origin
         pathRewrite: {
           '^/api': ''
