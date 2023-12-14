@@ -1,7 +1,10 @@
 > https://time.geekbang.org/comment/nice/74278
 
 # 极客时间评论区
-演示地址：[https://geektime.pages.dev/](https://geektime.pages.dev/)
+演示地址：
++ https://geektime.red-notes.com
++ https://geektime.pages.dev/
+
 ## 技术栈
 vue + daisyui(tailwindcss) + axios
 
