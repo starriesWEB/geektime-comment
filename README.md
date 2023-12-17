@@ -2,7 +2,7 @@
 
 # 极客时间评论区
 演示地址：
-+ https://geektime.red-notes.com
++ https://geektime-comment.red-notes.com/
 + https://geektime.pages.dev/
 
 ## 技术栈
